@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bolso Eletrônicos</title>
+  <style>
+    :root{--primary:#0b63d8;--muted:#f4f6fb;--dark:#0f1724;--card:#ffffff}
+    body{font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,var(--muted),#ffffff 60%);margin:0;color:var(--dark)}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px}
+    header{display:flex;align-items:center;gap:12px;padding:18px 0}
+    .logo{background:var(--primary);color:#fff;padding:10px 14px;border-radius:10px;font-weight:800}
+    .slogan{font-size:14px;color:#374151}
+    .hero{display:flex;gap:20px;align-items:center;margin-top:10px}
+    .hero-left{flex:1}
+    .hero-right{width:320px}
+    .cta{background:#fff;color:var(--primary);padding:10px 12px;border-radius:8px;text-decoration:none;font-weight:700}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
+    @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:560px){.grid{grid-template-columns:1fr}.hero{flex-direction:column}}
+    .card{background:var(--card);border-radius:12px;box-shadow:0 6px 18px rgba(15,23,36,0.06);overflow:hidden}
+    .card img{width:100%;height:200px;object-fit:cover}
+    .card-body{padding:12px}
+    .price{font-weight:800;color:var(--primary);margin-top:6px}
+    .old{color:#6b7280;text-decoration:line-through;margin-left:8px;font-weight:600}
+    .btn{display:inline-block;padding:10px 12px;border-radius:8px;background:var(--primary);color:#fff;text-decoration:none;font-weight:700}
+    .muted{color:#6b7280;font-size:13px}
+    footer{margin-top:40px;padding:24px 0;color:#6b7280;font-size:14px}
+    /* cart drawer */
+    .cart-btn{position:fixed;right:18px;bottom:18px;background:var(--primary);color:#fff;padding:12px 14px;border-radius:999px;box-shadow:0 8px 30px rgba(11,99,216,0.25);cursor:pointer}
+    .drawer{position:fixed;right:18px;bottom:76px;width:320px;background:#fff;border-radius:12px;box-shadow:0 12px 40px rgba(2,6,23,0.12);padding:12px;display:none}
+    .drawer h4{margin:0 0 8px 0}
+    .cart-item{display:flex;gap:8px;align-items:center;border-bottom:1px solid #f1f5f9;padding:8px 0}
+    .qty{width:48px;padding:6px;border-radius:6px;border:1px solid #e6eef8;text-align:center}
+    .whatsapp{display:block;margin-top:12px;text-align:center;padding:10px;border-radius:8px;background:#25D366;color:#fff;text-decoration:none;font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">BOLSO</div>
+      <div>
+        <div style="font-weight:700">Bolso Eletrônicos</div>
+        <div class="slogan">Tecnologia no seu bolso • Envio rápido</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
+        <div style="font-size:13px;color:#374151">Atendimento: WhatsApp</div>
+        <div style="background:#06b6d4;color:#fff;padding:6px 8px;border-radius:8px;font-weight:700">Lançamento</div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-left">
+        <h1 style="margin:0">Eletrônicos essenciais com preço justo</h1>
+        <p class="muted">Fones, carregadores, caixas de som e acessórios — seleção curada para o dia a dia.</p>
+        <a class="cta" href="#produtos">Ver produtos</a>
+      </div>
+      <div class="hero-right">
+        <img src="https://images.unsplash.com/photo-1510557880182-3a9353c6f1f9?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" style="width:100%;border-radius:12px;">
+      </div>
+    </section>
+
+    <section id="produtos">
+      <h2 style="margin-top:24px">Produtos em destaque</h2>
+      <div class="grid" id="productGrid">
+        <!-- Products injected by JS -->
+      </div>
+    </section>
+
+    <footer>
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px">
+        <div style="max-width:420px">
+          <h3 style="margin:0">Sobre a Bolso</h3>
+          <p class="muted">A Bolso Eletrônicos oferece acessórios e gadgets selecionados com foco em qualidade e preço justo. Atendimento via WhatsApp e envio rápido para todo o Brasil.</p>
+        </div>
+        <div>
+          <h4 style="margin:0">Atendimento</h4>
+          <div class="muted">WhatsApp: +55 21 97872-2937<brEmail: contato@bolsoeletronicos.com.br</div>
+        </div>
+        <div>
+          <h4 style="margin:0">Políticas</h4>
+          <div class="muted">Trocas & Devoluções • Política de Privacidade • Termos</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="cart-btn" id="cartBtn">Carrinho (0)</div>
+
+  <div class="drawer" id="drawer">
+    <h4>Seu carrinho</h4>
+    <div id="cartItems"></div>
+    <div style="margin-top:8px;font-weight:700">Total: R$ <span id="cartTotal">0.00</span></div>
+    <a id="whatsappLink" class="whatsapp" href="#" target="_blank">Comprar pelo WhatsApp</a>
+  </div>
+
+  <script>
+    // Produtos (com imagens reais via Unsplash)
+    const products = [
+      {
+        id: 'BOL-FONE-B100',
+        name: 'Fone Bluetooth B-100',
+        desc: 'Cancelamento de ruído • Até 30h de bateria',
+        price: 179.00,
+        old: 219.00,
+        img: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'
+      },
+      {
+        id: 'BOL-CHG-45',
+        name: 'Carregador Turbo 45W',
+        desc: 'Compatível USB-C • Carregamento rápido',
+        price: 89.00,
+        old: null,
+        img: 'https://images.unsplash.com/photo-1585386959984-a4155228a0f1?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'
+      },
+      {
+        id: 'BOL-SPK-01',
+        name: 'Caixa Portátil S-Prime',
+        desc: 'Bluetooth 5.0 • À prova d\'água IPX6',
+        price: 249.00,
+        old: null,
+        img: 'https://images.unsplash.com/photo-1518441902111-6f1f3b0f3d7b?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'
+      },
+      {
+        id: 'BOL-CAB-USB',
+        name: 'Cabo USB-C Reforçado',
+        desc: '1.5m • Nylon trançado',
+        price: 29.90,
+        old: null,
+        img: 'https://images.unsplash.com/photo-1602524819019-2f1c3e9accd6?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'
+      },
+      {
+        id: 'BOL-SUP-01',
+        name: 'Suporte Automotivo Magnético',
+        desc: 'Fixação 360º • Fácil instalação',
+        price: 49.90,
+        old: null,
+        img: 'https://images.unsplash.com/photo-1606813902798-6b5f0b2b0f4c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'
+      },
+      {
+        id: 'BOL-CASE-01',
+        name: 'Carregador Portátil 10000mAh',
+        desc: 'Bateria compacta • Duas entradas USB',
+        price: 119.00,
+        old: 149.00,
+        img: 'https://images.unsplash.com/photo-1533236897646-1b0b4d1f0f0d?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'
+      }
+    ];
+
+    const productGrid = document.getElementById('productGrid');
+    const cartBtn = document.getElementById('cartBtn');
+    const drawer = document.getElementById('drawer');
+    const cartItemsDiv = document.getElementById('cartItems');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const whatsappLink = document.getElementById('whatsappLink');
+
+    let cart = {};
+
+    function formatPrice(v){ return v.toFixed(2).replace('.',','); }
+
+    function renderProducts(){
+      productGrid.innerHTML = '';
+      products.forEach(p => {
+        const el = document.createElement('article');
+        el.className = 'card';
+        el.innerHTML = `
+          <img src="${p.img}" alt="${p.name}">
+          <div class="card-body">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-weight:700">${p.name}</div>
+              <div class="muted">SKU: ${p.id}</div>
+            </div>
+            <div class="muted" style="font-size:13px;margin-top:6px">${p.desc}</div>
+            <div class="price">R$ ${formatPrice(p.price)} ${p.old? '<span class="old">R$ '+formatPrice(p.old)+'</span>':''}</div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button class="btn" onclick="addToCart('${p.id}')">Adicionar</button>
+              <button style="display:inline-block;padding:10px 12px;border-radius:8px;background:#eef2ff;color:var(--primary);border:0;font-weight:700" onclick="buyNow('${p.id}')">Comprar</button>
+            </div>
+          </div>
+        `;
+        productGrid.appendChild(el);
+      });
+    }
+
+    function addToCart(id){
+      if(!cart[id]) cart[id]=0;
+      cart[id]++;
+      updateCartUI();
+    }
+
+    function buyNow(id){
+      // add then open whatsapp
+      addToCart(id);
+      openWhatsApp();
+    }
+
+    function updateCartUI(){
+      const count = Object.values(cart).reduce((s,n)=>s+n,0);
+      cartBtn.textContent = `Carrinho (${count})`;
+      renderDrawer();
+    }
+
+    function renderDrawer(){
+      cartItemsDiv.innerHTML = '';
+      let total = 0;
+      Object.keys(cart).forEach(id=>{
+        const p = products.find(x=>x.id===id);
+        const qty = cart[id];
+        const sub = p.price*qty;
+        total += sub;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <img src="${p.img}" style="width:56px;height:48px;object-fit:cover;border-radius:6px">
+          <div style="flex:1">
+            <div style="font-weight:700">${p.name}</div>
+            <div class="muted">R$ ${formatPrice(p.price)} x ${qty}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+            <input class="qty" type="number" value="${qty}" min="0" onchange="changeQty('${id}',this.value)">
+            <div style="font-weight:700">R$ ${formatPrice(sub)}</div>
+          </div>
+        `;
+        cartItemsDiv.appendChild(div);
+      });
+      cartTotalEl.textContent = formatPrice(total);
+      // update whatsapp link
+      const phone = '5521978722937';
+      let text = encodeURIComponent('Olá, quero comprar estes itens:\n' + Object.keys(cart).map(id=>{
+        const p = products.find(x=>x.id===id);
+        return `- ${p.name} x ${cart[id]} -> R$ ${formatPrice(p.price*cart[id])}`;
+      }).join('\n') + `\nTotal: R$ ${formatPrice(total)}`);
+      whatsappLink.href = `https://api.whatsapp.com/send?phone=${phone}&text=${text}`;
+    }
+
+    function changeQty(id, val){
+      val = parseInt(val,10);
+      if(isNaN(val) || val<=0){ delete cart[id]; } else { cart[id]=val; }
+      updateCartUI();
+    }
+
+    cartBtn.addEventListener('click', ()=>{
+      drawer.style.display = drawer.style.display==='block' ? 'none' : 'block';
+    });
+
+    function openWhatsApp(){
+      // ensure cart rendered
+      renderDrawer();
+      window.open(whatsappLink.href, '_blank');
+    }
+
+    // render initial
+    renderProducts();
+  </script>
+</body>
+</html>
